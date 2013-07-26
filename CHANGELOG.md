@@ -1,3 +1,7 @@
+1.0.2.0
+-----
+* Usuniêcie b³êdu uniemo¿liwiaj¹cego u¿ywanie wtyczki.
+
 1.0.1.0
 -----
 * Zmiana nazwy wtyczki na StealStatus.

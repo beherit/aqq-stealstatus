@@ -33,6 +33,10 @@ TPluginLink PluginLink;
 TPluginInfo PluginInfo;
 TPluginStateChange PluginStateChange;
 
+PPluginPopUp PopUp;
+AnsiString PopUpName;
+PPluginContact Contact;
+
 bool Polish=1; //Do lokalizacji
 
 //Kradziony opis
@@ -43,6 +47,7 @@ int __stdcall StealStatusService (WPARAM, LPARAM)
 {
   PluginLink.CallService(AQQ_FUNCTION_GETNETWORKSTATE,(WPARAM)(&PluginStateChange),0);
 
+  PluginStateChange.cbSize = sizeof(TPluginStateChange);
   PluginStateChange.Status = AnsiTowchar_t(opis);
   PluginStateChange.Force = true;
 
@@ -120,12 +125,13 @@ void SkrotOn()
 //Hook
 int __stdcall OnSystemPopUp (WPARAM wParam, LPARAM lParam)
 {
-  PPluginPopUp PopUp = (PPluginPopUp)lParam;
-  AnsiString PopUpName = (wchar_t*)(PopUp->Name);
+  PopUp = (PPluginPopUp)lParam;
+  PopUpName = (wchar_t*)(PopUp->Name);
   if(PopUpName=="muItem")
   {
-    PPluginContact Contact = (PPluginContact)wParam;
+    Contact = (PPluginContact)wParam;
     opis = (wchar_t*)(Contact->Status);
+
     if(opis!="")
      SkrotOn();
     else
@@ -141,7 +147,7 @@ extern "C"  __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQV
 {
   PluginInfo.cbSize = sizeof(TPluginInfo);
   PluginInfo.ShortName = (wchar_t*)L"StealStatus";
-  PluginInfo.Version = PLUGIN_MAKE_VERSION(1,0,1,0);
+  PluginInfo.Version = PLUGIN_MAKE_VERSION(1,0,2,0);
   PluginInfo.Description = (wchar_t *)L"Bπdü z≥odziejem - ukradnij opis :)";
   PluginInfo.Author = (wchar_t *)L"Krzysztof Grochocki (Beherit)";
   PluginInfo.AuthorMail = (wchar_t *)L"beherit666@vp.pl";
