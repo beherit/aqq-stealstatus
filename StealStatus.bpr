@@ -3,9 +3,9 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.06.00"/>
-    <PROJECT value="StoleStatus.dll"/>
-    <OBJFILES value="StoleStatus.obj"/>
-    <RESFILES value="StoleStatus.res"/>
+    <PROJECT value="StealStatus.dll"/>
+    <OBJFILES value="StealStatus.obj"/>
+    <RESFILES value="StealStatus.res"/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
@@ -21,9 +21,9 @@
     <LINKER value="ilink32"/>
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
-    <MAINSOURCE value="StoleStatus.bpf"/>
-    <INCLUDEPATH value="&quot;D:\Borland - moje projkety\StoleStatus&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="&quot;c:\program files\borland\c6&quot;;&quot;D:\Borland - moje projkety\StoleStatus&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <MAINSOURCE value="StealStatus.bpf"/>
+    <INCLUDEPATH value="&quot;D:\Borland - moje projkety\StoleStatus\StealStatus&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;D:\Borland - moje projkety\StoleStatus\StealStatus&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
@@ -43,9 +43,9 @@
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>
-      <FILE FILENAME="StoleStatus.res" FORMNAME="" UNITNAME="StoleStatus.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="StoleStatus.bpf" FORMNAME="" UNITNAME="StoleStatus" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="StoleStatus.cpp" FORMNAME="" UNITNAME="StoleStatus" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="StealStatus.res" FORMNAME="" UNITNAME="StealStatus.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="StealStatus.bpf" FORMNAME="" UNITNAME="StealStatus" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="StealStatus.cpp" FORMNAME="" UNITNAME="StealStatus" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -56,7 +56,7 @@ IncludeVerInfo=1
 AutoIncBuild=0
 MajorVer=1
 MinorVer=0
-Release=0
+Release=1
 Build=0
 Debug=0
 PreRelease=0
@@ -69,26 +69,23 @@ CodePage=1250
 [Version Info Keys]
 CompanyName=Krzysztof Grochocki (Beherit)
 FileDescription=
-FileVersion=1.0.0.0
-InternalName=StoleStatus
+FileVersion=1.0.1.0
+InternalName=StealStatus
 LegalCopyright=Krzysztof Grochocki (Beherit)
 LegalTrademarks=Krzysztof Grochocki (Beherit)
-OriginalFilename=StoleStatus.dll
-ProductName=StoleStatus
-ProductVersion=1.0.0.0
+OriginalFilename=StealStatus.dll
+ProductName=StealStatus
+ProductVersion=1.0.1.0
 Comments=Bądź złodziejem - ukradnij opis :)
-
-[Excluded Packages]
-C:\Program Files\ZipForge\Lib\C++ Builder 6\dclZipForgeb6.bpl=ZipForge Package
 
 [HistoryLists\hlIncludePath]
 Count=2
-Item0=D:\Borland - moje projkety\StoleStatus;$(BCB)\include;$(BCB)\include\vcl
+Item0=D:\Borland - moje projkety\StoleStatus\StealStatus;$(BCB)\include;$(BCB)\include\vcl
 Item1=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=2
-Item0=c:\program files\borland\c6;D:\Borland - moje projkety\StoleStatus;$(BCB)\lib\obj;$(BCB)\lib
+Item0=D:\Borland - moje projkety\StoleStatus\StealStatus;$(BCB)\lib\obj;$(BCB)\lib
 Item1=$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
