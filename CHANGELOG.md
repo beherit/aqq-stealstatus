@@ -1,3 +1,7 @@
+2.1.0.0
+-----
+* Przepisanie wtyczki pod kompilator Embarcadero C++ Builder XE3.
+
 2.0.0.0
 -----
 * Przepisanie wtyczki pod kompilator Embarcadero C++ Builder 2010.
