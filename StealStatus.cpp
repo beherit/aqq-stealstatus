@@ -14,7 +14,6 @@ int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved
 TPluginLink PluginLink;
 TPluginInfo PluginInfo;
 TPluginAction StealStatusItem;
-TPluginAction StealStatusSeparator;
 PPluginContact SystemPopUContact;
 PPluginPopUp PopUp;
 //---------------------------------------------------------------------------
@@ -45,42 +44,38 @@ int __stdcall ServiceStealStatusItem(WPARAM wParam, LPARAM lParam)
 //Usuwanie elementu z interfejsu
 void DestroyStealStatusItem()
 {
-  //Wlasciwy element
   StealStatusItem.cbSize = sizeof(TPluginAction);
   StealStatusItem.pszName = L"StealStatusItem";
   PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM ,0,(LPARAM)(&StealStatusItem));
   PluginLink.DestroyServiceFunction(ServiceStealStatusItem);
-  //Separator
-  StealStatusSeparator.cbSize = sizeof(TPluginAction);
-  StealStatusSeparator.pszName = L"StealStatusSeparator";
-  PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM ,0,(LPARAM)(&StealStatusSeparator));
 }
 //---------------------------------------------------------------------------
 
 //Tworzenie elementu w interfejsie
 void BuildStealStatusItem()
 {
-  //Wlasciwy element
+  //Ustalanie pozycji elementu "Wizytowka"
+  TPluginItemDescriber PluginItemDescriber;
+  PluginItemDescriber.cbSize = sizeof(TPluginItemDescriber);
+  PluginItemDescriber.FormHandle = 0;
+  PluginItemDescriber.ParentName = L"muItem";
+  PluginItemDescriber.Name = L"muProfile";
+  PPluginAction Action = (PPluginAction)PluginLink.CallService(AQQ_CONTROLS_GETPOPUPMENUITEM,0,(LPARAM)(&PluginItemDescriber));
+  int Position = Action->Position;
+  //Tworzenie elementu wtyczki
   PluginLink.CreateServiceFunction(L"sStealStatusItem",ServiceStealStatusItem);
   StealStatusItem.cbSize = sizeof(TPluginAction);
   StealStatusItem.pszName = L"StealStatusItem";
   StealStatusItem.pszCaption = L"Ukradnij opis!";;
-  StealStatusItem.Position = 12;
+  StealStatusItem.Position = Position + 2;
   StealStatusItem.IconIndex = -1;
   StealStatusItem.pszService = L"sStealStatusItem";
   StealStatusItem.pszPopupName = L"muItem";
   PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&StealStatusItem));
-  //Separator
-  StealStatusSeparator.cbSize = sizeof(TPluginAction);
-  StealStatusSeparator.pszName = L"StealStatusSeparator";
-  StealStatusSeparator.pszCaption = L"-";
-  StealStatusSeparator.Position = 13;
-  StealStatusSeparator.pszPopupName = L"muItem";
-  PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&StealStatusSeparator));
 }
 //---------------------------------------------------------------------------
 
-//Hook
+//Hook na pokazywanie popumenu
 int __stdcall OnSystemPopUp(WPARAM wParam, LPARAM lParam)
 {
   PopUp = (PPluginPopUp)lParam;
@@ -161,7 +156,7 @@ extern "C" __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQVe
 {
   PluginInfo.cbSize = sizeof(TPluginInfo);
   PluginInfo.ShortName = L"StealStatus";
-  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,1,0,0);
+  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,2,0,0);
   PluginInfo.Description = L"Wtyczka napisana z nudów, realizuje propozycjê jednego z u¿ytkowników forum. Jest przeznaczona wy³¹cznie dla tych, którzy lubi¹ kraœæ czyjeœ opisy i ustawiaæ je u siebie.";
   PluginInfo.Author = L"Krzysztof Grochocki (Beherit)";
   PluginInfo.AuthorMail = L"kontakt@beherit.pl";

@@ -1,3 +1,9 @@
+2.2.0.0
+-----
+* Dodanie 64-bitowej wersji wtyczki.
+* Drobne zmiany w tworzeniu elementu popupmenu kontaktu.
+* Zmniejszenie rozmiaru wtyczki 32-bitowej poprzez u¿ycie kompresji LZMA.
+
 2.1.0.0
 -----
 * Przepisanie wtyczki pod kompilator Embarcadero C++ Builder XE3.
