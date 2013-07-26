@@ -1,3 +1,8 @@
+2.0.0.0
+-----
+* Przepisanie wtyczki pod kompilator Embarcadero C++ Builder 2010.
+* Pe³ne wsparcie Unicode!
+
 1.0.2.0
 -----
 * Usuniêcie b³êdu uniemo¿liwiaj¹cego u¿ywanie wtyczki.

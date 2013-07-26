@@ -12,19 +12,6 @@ int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved
 }
 //---------------------------------------------------------------------------
 
-//zamiana AnsiString->wchar_t*
-wchar_t* AnsiTowchar_t(AnsiString Str)
-{                                 
-  const char* Text = Str.c_str();
-  int size = MultiByteToWideChar(GetACP(), 0, Text, -1, 0,0);
-  wchar_t* wbuffer = new wchar_t[size+1];
-
-  MultiByteToWideChar(GetACP(), 0, Text, -1, wbuffer, size+1);
-
-  return wbuffer;
-}
-//---------------------------------------------------------------------------
-
 //utworzenie obiektow do struktur
 TPluginAction PluginActionButton;
 TPluginAction PluginActionSeparator;
@@ -34,13 +21,13 @@ TPluginInfo PluginInfo;
 TPluginStateChange PluginStateChange;
 
 PPluginPopUp PopUp;
-AnsiString PopUpName;
+UnicodeString PopUpName;
 PPluginContact Contact;
 
 bool Polish=1; //Do lokalizacji
 
 //Kradziony opis
-AnsiString opis;
+UnicodeString opis;
 
 //Serwis
 int __stdcall StealStatusService (WPARAM, LPARAM)
@@ -48,7 +35,7 @@ int __stdcall StealStatusService (WPARAM, LPARAM)
   PluginLink.CallService(AQQ_FUNCTION_GETNETWORKSTATE,(WPARAM)(&PluginStateChange),0);
 
   PluginStateChange.cbSize = sizeof(TPluginStateChange);
-  PluginStateChange.Status = AnsiTowchar_t(opis);
+  PluginStateChange.Status = opis.w_str();
   PluginStateChange.Force = true;
 
   PluginLink.CallService(AQQ_SYSTEM_SETSHOWANDSTATUS,0,(LPARAM)(&PluginStateChange));
@@ -66,7 +53,7 @@ void PrzypiszSkrot()
    PluginActionButton.pszCaption = (wchar_t*) L"Ukradnij opis!";
   else
    PluginActionButton.pszCaption = (wchar_t*) L"Steal status!";
-  PluginActionButton.Position = 10;
+  PluginActionButton.Position = 12;
   PluginActionButton.IconIndex = -1;
   PluginActionButton.pszService = (wchar_t*) L"serwis_StealStatusService";
   PluginActionButton.pszPopupName = (wchar_t*) L"muItem";
@@ -78,7 +65,7 @@ void PrzypiszSkrot()
   PluginActionSeparator.cbSize = sizeof(TPluginAction);
   PluginActionSeparator.pszCaption = (wchar_t*) L"-";
   PluginActionSeparator.pszName = (wchar_t*)L"StealStatusSeparator";
-  PluginActionSeparator.Position = 11;
+  PluginActionSeparator.Position = 13;
   PluginActionSeparator.pszPopupName = (wchar_t*) L"muItem";
   PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&PluginActionSeparator));
 }
@@ -147,12 +134,14 @@ extern "C"  __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQV
 {
   PluginInfo.cbSize = sizeof(TPluginInfo);
   PluginInfo.ShortName = (wchar_t*)L"StealStatus";
-  PluginInfo.Version = PLUGIN_MAKE_VERSION(1,0,2,0);
+  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,0,0,0);
   PluginInfo.Description = (wchar_t *)L"Bπdü z≥odziejem - ukradnij opis :)";
   PluginInfo.Author = (wchar_t *)L"Krzysztof Grochocki (Beherit)";
-  PluginInfo.AuthorMail = (wchar_t *)L"beherit666@vp.pl";
+  PluginInfo.AuthorMail = (wchar_t *)L"sirbeherit@gmail.com";
   PluginInfo.Copyright = (wchar_t *)L"Krzysztof Grochocki (Beherit)";
-  PluginInfo.Homepage = (wchar_t *)L"";
+  PluginInfo.Homepage = (wchar_t *)L"http://beherit.pl/";
+  PluginInfo.Flag = 0;
+  PluginInfo.ReplaceDefaultModule = 0;
 
   return &PluginInfo;
 }
@@ -163,7 +152,7 @@ extern "C" int __declspec(dllexport) __stdcall Load(PPluginLink Link)
   PluginLink = *Link;
 
   //Rozpoznanie lokalizacji
-  AnsiString Lang = (wchar_t*)(PluginLink.CallService(AQQ_FUNCTION_GETLANGSTR,0,(LPARAM)(L"Password")));
+  UnicodeString Lang = (wchar_t*)(PluginLink.CallService(AQQ_FUNCTION_GETLANGSTR,0,(LPARAM)(L"Password")));
   if(Lang=="Has≥o")
    Polish=1;
   else
@@ -187,4 +176,4 @@ extern "C" int __declspec(dllexport) __stdcall Unload()
 
   return 0;
 }
-//---------------------------------------------------------------------------
+//--------------------------------------------------------------------------
