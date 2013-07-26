@@ -1,179 +1,173 @@
-//---------------------------------------------------------------------------
 #include <vcl.h>
 #include <windows.h>
 #pragma hdrstop
 #pragma argsused
-#include "Aqq.h"
-//---------------------------------------------------------------------------
+#include <PluginAPI.h>
 
 int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved)
 {
-  return 1;
+	return 1;
 }
 //---------------------------------------------------------------------------
 
-//utworzenie obiektow do struktur
-TPluginAction PluginActionButton;
-TPluginAction PluginActionSeparator;
-TPluginActionEdit PluginActionEdit;
+//Struktury-glowne-----------------------------------------------------------
 TPluginLink PluginLink;
 TPluginInfo PluginInfo;
-TPluginStateChange PluginStateChange;
-
+TPluginAction StealStatusItem;
+TPluginAction StealStatusSeparator;
+PPluginContact SystemPopUContact;
 PPluginPopUp PopUp;
-UnicodeString PopUpName;
-PPluginContact Contact;
+//---------------------------------------------------------------------------
+UnicodeString StolenStatus;
+//---------------------------------------------------------------------------
 
-bool Polish=1; //Do lokalizacji
-
-//Kradziony opis
-UnicodeString opis;
-
-//Serwis
-int __stdcall StealStatusService (WPARAM, LPARAM)
+//Ustawianie nowego opisu
+void SetStatus(UnicodeString Status)
 {
-  PluginLink.CallService(AQQ_FUNCTION_GETNETWORKSTATE,(WPARAM)(&PluginStateChange),0);
-
+  TPluginStateChange PluginStateChange;
+  PluginLink.CallService(AQQ_FUNCTION_GETNETWORKSTATE,(WPARAM)&PluginStateChange,0);
   PluginStateChange.cbSize = sizeof(TPluginStateChange);
-  PluginStateChange.Status = opis.w_str();
+  PluginStateChange.Status = Status.w_str();
   PluginStateChange.Force = true;
+  PluginLink.CallService(AQQ_SYSTEM_SETSHOWANDSTATUS,0,(LPARAM)&PluginStateChange);
+}
+//---------------------------------------------------------------------------
 
-  PluginLink.CallService(AQQ_SYSTEM_SETSHOWANDSTATUS,0,(LPARAM)(&PluginStateChange));
+//Serwis elementu w interfejsie
+int __stdcall ServiceStealStatusItem(WPARAM wParam, LPARAM lParam)
+{
+  SetStatus(StolenStatus);
 
   return 0;
 }
 //---------------------------------------------------------------------------
 
-//Przypisywanie skrótu w popPlugins
-void PrzypiszSkrot()
+//Usuwanie elementu z interfejsu
+void DestroyStealStatusItem()
 {
-  PluginActionButton.cbSize = sizeof(TPluginAction);
-  PluginActionButton.pszName = (wchar_t*)L"StealStatusButton";
-  if(Polish==1)
-   PluginActionButton.pszCaption = (wchar_t*) L"Ukradnij opis!";
-  else
-   PluginActionButton.pszCaption = (wchar_t*) L"Steal status!";
-  PluginActionButton.Position = 12;
-  PluginActionButton.IconIndex = -1;
-  PluginActionButton.pszService = (wchar_t*) L"serwis_StealStatusService";
-  PluginActionButton.pszPopupName = (wchar_t*) L"muItem";
-  PluginActionButton.Checked = false;
-
-  PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&PluginActionButton));
-  PluginLink.CreateServiceFunction(L"serwis_StealStatusService",StealStatusService);
-
-  PluginActionSeparator.cbSize = sizeof(TPluginAction);
-  PluginActionSeparator.pszCaption = (wchar_t*) L"-";
-  PluginActionSeparator.pszName = (wchar_t*)L"StealStatusSeparator";
-  PluginActionSeparator.Position = 13;
-  PluginActionSeparator.pszPopupName = (wchar_t*) L"muItem";
-  PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&PluginActionSeparator));
+  //Wlasciwy element
+  StealStatusItem.cbSize = sizeof(TPluginAction);
+  StealStatusItem.pszName = L"StealStatusItem";
+  PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM ,0,(LPARAM)(&StealStatusItem));
+  PluginLink.DestroyServiceFunction(ServiceStealStatusItem);
+  //Separator
+  StealStatusSeparator.cbSize = sizeof(TPluginAction);
+  StealStatusSeparator.pszName = L"StealStatusSeparator";
+  PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM ,0,(LPARAM)(&StealStatusSeparator));
 }
 //---------------------------------------------------------------------------
 
-//Wylaczanie skrotu
-void SkrotOff()
+//Tworzenie elementu w interfejsie
+void BuildStealStatusItem()
 {
-  PluginActionEdit.cbSize = sizeof(TPluginActionEdit);
-  PluginActionEdit.pszName = (wchar_t*)L"StealStatusButton";
-  if(Polish==1)
-   PluginActionEdit.Caption = (wchar_t*) L"Ukradnij opis!";
-  else
-   PluginActionEdit.Caption = (wchar_t*) L"Steal status!";
-  PluginActionEdit.Hint = (wchar_t*)L"";
-  PluginActionEdit.Enabled = false;
-  PluginActionEdit.Visible = true;
-  PluginActionEdit.IconIndex = -1;
-  PluginActionEdit.Checked = false;
-
-  PluginLink.CallService(AQQ_CONTROLS_EDITPOPUPMENUITEM,0,(LPARAM)(&PluginActionEdit));
-}
-//---------------------------------------------------------------------------
-
-//Wlaczanie skrotu
-void SkrotOn()
-{
-  PluginActionEdit.cbSize = sizeof(TPluginActionEdit);
-  PluginActionEdit.pszName = (wchar_t*)L"StealStatusButton";
-  if(Polish==1)
-   PluginActionEdit.Caption = (wchar_t*) L"Ukradnij opis!";
-  else
-   PluginActionEdit.Caption = (wchar_t*) L"Steal status!";
-  PluginActionEdit.Hint = (wchar_t*)L"";
-  PluginActionEdit.Enabled = true;
-  PluginActionEdit.Visible = true;
-  PluginActionEdit.IconIndex = -1;
-  PluginActionEdit.Checked = false;
-
-  PluginLink.CallService(AQQ_CONTROLS_EDITPOPUPMENUITEM,0,(LPARAM)(&PluginActionEdit));
+  //Wlasciwy element
+  PluginLink.CreateServiceFunction(L"sStealStatusItem",ServiceStealStatusItem);
+  StealStatusItem.cbSize = sizeof(TPluginAction);
+  StealStatusItem.pszName = L"StealStatusItem";
+  StealStatusItem.pszCaption = L"Ukradnij opis!";;
+  StealStatusItem.Position = 12;
+  StealStatusItem.IconIndex = -1;
+  StealStatusItem.pszService = L"sStealStatusItem";
+  StealStatusItem.pszPopupName = L"muItem";
+  PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&StealStatusItem));
+  //Separator
+  StealStatusSeparator.cbSize = sizeof(TPluginAction);
+  StealStatusSeparator.pszName = L"StealStatusSeparator";
+  StealStatusSeparator.pszCaption = L"-";
+  StealStatusSeparator.Position = 13;
+  StealStatusSeparator.pszPopupName = L"muItem";
+  PluginLink.CallService(AQQ_CONTROLS_CREATEPOPUPMENUITEM,0,(LPARAM)(&StealStatusSeparator));
 }
 //---------------------------------------------------------------------------
 
 //Hook
-int __stdcall OnSystemPopUp (WPARAM wParam, LPARAM lParam)
+int __stdcall OnSystemPopUp(WPARAM wParam, LPARAM lParam)
 {
   PopUp = (PPluginPopUp)lParam;
-  PopUpName = (wchar_t*)(PopUp->Name);
+  //Pobieranie nazwy popupmenu
+  UnicodeString PopUpName = (wchar_t*)PopUp->Name;
+  //Popupmenu dostepne spod PPM na kontakcie w oknie kontaktow
   if(PopUpName=="muItem")
   {
-    Contact = (PPluginContact)wParam;
-    opis = (wchar_t*)(Contact->Status);
-
-    if(opis!="")
-     SkrotOn();
-    else
-     SkrotOff();
+	SystemPopUContact = (PPluginContact)wParam;
+	//Pobieranie opisu kontatku
+	UnicodeString Status = (wchar_t*)SystemPopUContact->Status;
+	//Usuwanie zbednych spacji
+	Status = Status.Trim();
+	//Przekazanie opisu do globalnej zmiennej
+	StolenStatus = Status;
+	//Wlaczenie elementu
+	if(!Status.IsEmpty())
+	{
+	  TPluginActionEdit PluginActionEdit;
+	  PluginActionEdit.cbSize = sizeof(TPluginActionEdit);
+	  PluginActionEdit.pszName = L"StealStatusItem";
+	  PluginActionEdit.Caption = L"Ukradnij opis!";
+	  PluginActionEdit.Hint = L"";
+	  PluginActionEdit.Enabled = true;
+	  PluginActionEdit.Visible = true;
+	  PluginActionEdit.IconIndex = -1;
+	  PluginActionEdit.Checked = false;
+	  PluginLink.CallService(AQQ_CONTROLS_EDITPOPUPMENUITEM,0,(LPARAM)(&PluginActionEdit));
+	}
+	//Wylaczenie elementu
+	else
+	{
+	  TPluginActionEdit PluginActionEdit;
+	  PluginActionEdit.cbSize = sizeof(TPluginActionEdit);
+	  PluginActionEdit.pszName = L"StealStatusItem";
+	  PluginActionEdit.Caption = L"Ukradnij opis!";
+	  PluginActionEdit.Hint = L"";
+	  PluginActionEdit.Enabled = false;
+	  PluginActionEdit.Visible = true;
+	  PluginActionEdit.IconIndex = -1;
+	  PluginActionEdit.Checked = false;
+	  PluginLink.CallService(AQQ_CONTROLS_EDITPOPUPMENUITEM,0,(LPARAM)(&PluginActionEdit));
+	}
   }
 
   return 0;
 }
 //---------------------------------------------------------------------------
 
-//Program
-extern "C"  __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQVersion)
+//Zaladowanie wtyczki
+extern "C" int __declspec(dllexport) __stdcall Load(PPluginLink Link)
+{
+  //Linkowanie wtyczki z komunikatorem
+  PluginLink = *Link;
+  //Hook na pokazywanie popumenu
+  PluginLink.HookEvent(AQQ_SYSTEM_POPUP,OnSystemPopUp);
+  //Tworzenie elementu w interfejsie
+  BuildStealStatusItem();
+
+  return 0;
+}
+//---------------------------------------------------------------------------
+
+//Wyladowanie wtyczki
+extern "C" int __declspec(dllexport) __stdcall Unload()
+{
+  //Wyladowanie wszystkich hookow
+  PluginLink.UnhookEvent(OnSystemPopUp);
+  //Usuwanie elementu z interfejsu
+  DestroyStealStatusItem();
+
+  return 0;
+}
+//---------------------------------------------------------------------------
+
+//Informacje o wtyczce
+extern "C" __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQVersion)
 {
   PluginInfo.cbSize = sizeof(TPluginInfo);
-  PluginInfo.ShortName = (wchar_t*)L"StealStatus";
-  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,0,0,0);
-  PluginInfo.Description = (wchar_t *)L"B¹dŸ z³odziejem - ukradnij opis :)";
-  PluginInfo.Author = (wchar_t *)L"Krzysztof Grochocki (Beherit)";
-  PluginInfo.AuthorMail = (wchar_t *)L"sirbeherit@gmail.com";
-  PluginInfo.Copyright = (wchar_t *)L"Krzysztof Grochocki (Beherit)";
-  PluginInfo.Homepage = (wchar_t *)L"http://beherit.pl/";
-  PluginInfo.Flag = 0;
-  PluginInfo.ReplaceDefaultModule = 0;
+  PluginInfo.ShortName = L"StealStatus";
+  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,1,0,0);
+  PluginInfo.Description = L"Wtyczka napisana z nudów, realizuje propozycjê jednego z u¿ytkowników forum. Jest przeznaczona wy³¹cznie dla tych, którzy lubi¹ kraœæ czyjeœ opisy i ustawiaæ je u siebie.";
+  PluginInfo.Author = L"Krzysztof Grochocki (Beherit)";
+  PluginInfo.AuthorMail = L"kontakt@beherit.pl";
+  PluginInfo.Copyright = L"Krzysztof Grochocki (Beherit)";
+  PluginInfo.Homepage = L"http://beherit.pl";
 
   return &PluginInfo;
 }
 //---------------------------------------------------------------------------
-
-extern "C" int __declspec(dllexport) __stdcall Load(PPluginLink Link)
-{
-  PluginLink = *Link;
-
-  //Rozpoznanie lokalizacji
-  UnicodeString Lang = (wchar_t*)(PluginLink.CallService(AQQ_FUNCTION_GETLANGSTR,0,(LPARAM)(L"Password")));
-  if(Lang=="Has³o")
-   Polish=1;
-  else
-   Polish=0;
-  //Koniec
-
-  PrzypiszSkrot();
-
-  PluginLink.HookEvent(AQQ_SYSTEM_POPUP,OnSystemPopUp);
-
-  return 0;
-}
-//---------------------------------------------------------------------------
-
-extern "C" int __declspec(dllexport) __stdcall Unload()
-{
-  PluginLink.DestroyServiceFunction(StealStatusService);
-  PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM,0,(LPARAM)(&PluginActionButton));
-  PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM,0,(LPARAM)(&PluginActionSeparator));
-  PluginLink.UnhookEvent(OnSystemPopUp);
-
-  return 0;
-}
-//--------------------------------------------------------------------------
