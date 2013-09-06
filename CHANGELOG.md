@@ -1,3 +1,7 @@
+2.2.1.0
+-----
+* Optymalizacja kodu.
+
 2.2.0.0
 -----
 * Dodanie 64-bitowej wersji wtyczki.
