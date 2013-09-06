@@ -1,3 +1,24 @@
+//---------------------------------------------------------------------------
+// Copyright (C) 2009-2013 Krzysztof Grochocki
+//
+// This file is part of StealStatus
+//
+// StealStatus is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 3, or (at your option)
+// any later version.
+//
+// StealStatus is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with GNU Radio; see the file COPYING. If not, write to
+// the Free Software Foundation, Inc., 51 Franklin Street,
+// Boston, MA 02110-1301, USA.
+//---------------------------------------------------------------------------
+
 #include <vcl.h>
 #include <windows.h>
 #pragma hdrstop
@@ -13,11 +34,8 @@ int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved
 //Struktury-glowne-----------------------------------------------------------
 TPluginLink PluginLink;
 TPluginInfo PluginInfo;
-TPluginAction StealStatusItem;
-PPluginContact SystemPopUContact;
-PPluginPopUp PopUp;
-//---------------------------------------------------------------------------
-UnicodeString StolenStatus;
+//Skopiowany-opis------------------------------------------------------------
+UnicodeString Status;
 //---------------------------------------------------------------------------
 
 //Ustawianie nowego opisu
@@ -25,7 +43,6 @@ void SetStatus(UnicodeString Status)
 {
   TPluginStateChange PluginStateChange;
   PluginLink.CallService(AQQ_FUNCTION_GETNETWORKSTATE,(WPARAM)&PluginStateChange,0);
-  PluginStateChange.cbSize = sizeof(TPluginStateChange);
   PluginStateChange.Status = Status.w_str();
   PluginStateChange.Force = true;
   PluginLink.CallService(AQQ_SYSTEM_SETSHOWANDSTATUS,0,(LPARAM)&PluginStateChange);
@@ -35,7 +52,7 @@ void SetStatus(UnicodeString Status)
 //Serwis elementu w interfejsie
 int __stdcall ServiceStealStatusItem(WPARAM wParam, LPARAM lParam)
 {
-  SetStatus(StolenStatus);
+  SetStatus(Status);
 
   return 0;
 }
@@ -44,6 +61,8 @@ int __stdcall ServiceStealStatusItem(WPARAM wParam, LPARAM lParam)
 //Usuwanie elementu z interfejsu
 void DestroyStealStatusItem()
 {
+  TPluginAction StealStatusItem;
+  ZeroMemory(&StealStatusItem, sizeof(TPluginAction));
   StealStatusItem.cbSize = sizeof(TPluginAction);
   StealStatusItem.pszName = L"StealStatusItem";
   PluginLink.CallService(AQQ_CONTROLS_DESTROYPOPUPMENUITEM ,0,(LPARAM)(&StealStatusItem));
@@ -56,18 +75,20 @@ void BuildStealStatusItem()
 {
   //Ustalanie pozycji elementu "Wizytowka"
   TPluginItemDescriber PluginItemDescriber;
+  ZeroMemory(&PluginItemDescriber, sizeof(TPluginItemDescriber));
   PluginItemDescriber.cbSize = sizeof(TPluginItemDescriber);
   PluginItemDescriber.FormHandle = 0;
   PluginItemDescriber.ParentName = L"muItem";
   PluginItemDescriber.Name = L"muProfile";
-  PPluginAction Action = (PPluginAction)PluginLink.CallService(AQQ_CONTROLS_GETPOPUPMENUITEM,0,(LPARAM)(&PluginItemDescriber));
-  int Position = Action->Position;
+  TPluginAction Action = *(PPluginAction)(PluginLink.CallService(AQQ_CONTROLS_GETPOPUPMENUITEM,0,(LPARAM)(&PluginItemDescriber)));
   //Tworzenie elementu wtyczki
   PluginLink.CreateServiceFunction(L"sStealStatusItem",ServiceStealStatusItem);
+  TPluginAction StealStatusItem;
+  ZeroMemory(&StealStatusItem, sizeof(TPluginAction));
   StealStatusItem.cbSize = sizeof(TPluginAction);
   StealStatusItem.pszName = L"StealStatusItem";
   StealStatusItem.pszCaption = L"Ukradnij opis!";;
-  StealStatusItem.Position = Position + 2;
+  StealStatusItem.Position = Action.Position + 2;
   StealStatusItem.IconIndex = -1;
   StealStatusItem.pszService = L"sStealStatusItem";
   StealStatusItem.pszPopupName = L"muItem";
@@ -78,19 +99,17 @@ void BuildStealStatusItem()
 //Hook na pokazywanie popumenu
 int __stdcall OnSystemPopUp(WPARAM wParam, LPARAM lParam)
 {
-  PopUp = (PPluginPopUp)lParam;
+  TPluginPopUp PopUp = *(PPluginPopUp)lParam;
   //Pobieranie nazwy popupmenu
-  UnicodeString PopUpName = (wchar_t*)PopUp->Name;
+  UnicodeString PopUpName = (wchar_t*)PopUp.Name;
   //Popupmenu dostepne spod PPM na kontakcie w oknie kontaktow
   if(PopUpName=="muItem")
   {
-	SystemPopUContact = (PPluginContact)wParam;
+	TPluginContact SystemPopUContact = *(PPluginContact)wParam;
 	//Pobieranie opisu kontatku
-	UnicodeString Status = (wchar_t*)SystemPopUContact->Status;
+	Status = (wchar_t*)SystemPopUContact.Status;
 	//Usuwanie zbednych spacji
-	Status = Status.Trim();
-	//Przekazanie opisu do globalnej zmiennej
-	StolenStatus = Status;
+	Status.Trim();
 	//Wlaczenie elementu
 	if(!Status.IsEmpty())
 	{
@@ -156,8 +175,8 @@ extern "C" __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQVe
 {
   PluginInfo.cbSize = sizeof(TPluginInfo);
   PluginInfo.ShortName = L"StealStatus";
-  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,2,0,0);
-  PluginInfo.Description = L"Wtyczka napisana z nudów, realizuje propozycjê jednego z u¿ytkowników forum. Jest przeznaczona wy³¹cznie dla tych, którzy lubi¹ kraœæ czyjeœ opisy i ustawiaæ je u siebie.";
+  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,2,1,0);
+  PluginInfo.Description = L"Wtyczka s³u¿y do ustawiania opisu we wszystkich kontach, na podstawie opisu wybranego kontaktu.";
   PluginInfo.Author = L"Krzysztof Grochocki (Beherit)";
   PluginInfo.AuthorMail = L"kontakt@beherit.pl";
   PluginInfo.Copyright = L"Krzysztof Grochocki (Beherit)";

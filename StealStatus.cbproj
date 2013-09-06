@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{DA507A14-67CB-44EE-8110-90E7EC7C89BF}</ProjectGuid>
-        <ProjectVersion>14.4</ProjectVersion>
+        <ProjectVersion>14.6</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Release</Config>
@@ -74,19 +74,21 @@
         <BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <PackageImports>IndyIPClient;vclie;vcltouch;acntBuilderXE3;bcbsmp;CustomIPTransport;vclribbon;fmx;dsnap;rtl;dbrtl;fmxase;vcl;IndyCore;bindcomp;IndySystem;IndyIPCommon;IndyIPServer;inetdbbde;acntBuilderXE3_R;DBXInterBaseDriver;inet;fmxobj;vclx;xmlrtl;inetdbxpress;webdsnap;DbxCommonDriver;vclimg;fmxdae;IndyProtocols;dbxcds;MetropolisUILiveTile;vclactnband;bindengine;vcldb;bcbie;dbexpress;vcldsnap;$(PackageImports)</PackageImports>
-        <VerInfo_Keys>FileVersion=2.2.0.0;InternalName=;LegalTrademarks=;OriginalFilename=;ProductName=StealStatus;ProductVersion=2.0.0.0;Comments=;LegalCopyright=Krzysztof Grochocki (Beherit)</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=2.2.1.0;ProductName=StealStatus;ProductVersion=2.0.0.0;LegalCopyright=Krzysztof Grochocki (Beherit)</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
-        <VerInfo_Keys>FileVersion=2.2.0.0;InternalName=;LegalCopyright=Krzysztof Grochocki (Beherit);LegalTrademarks=;OriginalFilename=;ProductName=StealStatus;ProductVersion=2.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=2.2.1.0;LegalCopyright=Krzysztof Grochocki (Beherit);ProductName=StealStatus;ProductVersion=2.0.0.0</VerInfo_Keys>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -110,36 +112,41 @@
         <ILINK_LibraryPath>$(BDSLIB)\$(PLATFORM)\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
         <Defines>_DEBUG;$(Defines)</Defines>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
-        <VerInfo_Keys>FileVersion=2.2.0.0;InternalName=;LegalTrademarks=;OriginalFilename=;ProductName=StealStatus;ProductVersion=2.0.0.0;Comments=;LegalCopyright=Krzysztof Grochocki (Beherit)</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=2.2.1.0;ProductName=StealStatus;ProductVersion=2.0.0.0;LegalCopyright=Krzysztof Grochocki (Beherit)</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <Defines>_DEBUG;$(Defines)</Defines>
-        <VerInfo_Keys>FileVersion=2.2.0.0;InternalName=;LegalCopyright=Krzysztof Grochocki (Beherit);LegalTrademarks=;OriginalFilename=;ProductName=StealStatus;ProductVersion=2.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=2.2.1.0;LegalCopyright=Krzysztof Grochocki (Beherit);ProductName=StealStatus;ProductVersion=2.0.0.0</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
         <Defines>NDEBUG;$(Defines)</Defines>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>FileVersion=2.2.0.0;InternalName=;LegalTrademarks=;OriginalFilename=;ProductName=StealStatus;ProductVersion=2.0.0.0;Comments=;LegalCopyright=Krzysztof Grochocki (Beherit)</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=2.2.1.0;ProductName=StealStatus;ProductVersion=2.0.0.0;LegalCopyright=Krzysztof Grochocki (Beherit)</VerInfo_Keys>
         <LinkPackageStatics>rtl.lib;vcl.lib</LinkPackageStatics>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
+        <LinkPackageStatics>rtl.lib;vcl.lib</LinkPackageStatics>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <Defines>NDEBUG;$(Defines)</Defines>
-        <VerInfo_Keys>FileVersion=2.2.0.0;InternalName=;LegalCopyright=Krzysztof Grochocki (Beherit);LegalTrademarks=;OriginalFilename=;ProductName=StealStatus;ProductVersion=2.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=2.2.1.0;LegalCopyright=Krzysztof Grochocki (Beherit);ProductName=StealStatus;ProductVersion=2.0.0.0</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <CppCompile Include="StealStatus.cpp">
