@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-// Copyright (C) 2009-2013 Krzysztof Grochocki
+// Copyright (C) 2009-2014 Krzysztof Grochocki
 //
 // This file is part of StealStatus
 //
@@ -50,7 +50,7 @@ void SetStatus(UnicodeString Status)
 //---------------------------------------------------------------------------
 
 //Serwis elementu w interfejsie
-int __stdcall ServiceStealStatusItem(WPARAM wParam, LPARAM lParam)
+INT_PTR __stdcall ServiceStealStatusItem(WPARAM wParam, LPARAM lParam)
 {
   SetStatus(Status);
 
@@ -97,7 +97,7 @@ void BuildStealStatusItem()
 //---------------------------------------------------------------------------
 
 //Hook na pokazywanie popumenu
-int __stdcall OnSystemPopUp(WPARAM wParam, LPARAM lParam)
+INT_PTR __stdcall OnSystemPopUp(WPARAM wParam, LPARAM lParam)
 {
   TPluginPopUp PopUp = *(PPluginPopUp)lParam;
   //Pobieranie nazwy popupmenu
@@ -145,7 +145,7 @@ int __stdcall OnSystemPopUp(WPARAM wParam, LPARAM lParam)
 //---------------------------------------------------------------------------
 
 //Zaladowanie wtyczki
-extern "C" int __declspec(dllexport) __stdcall Load(PPluginLink Link)
+extern "C" INT_PTR __declspec(dllexport) __stdcall Load(PPluginLink Link)
 {
   //Linkowanie wtyczki z komunikatorem
   PluginLink = *Link;
@@ -159,7 +159,7 @@ extern "C" int __declspec(dllexport) __stdcall Load(PPluginLink Link)
 //---------------------------------------------------------------------------
 
 //Wyladowanie wtyczki
-extern "C" int __declspec(dllexport) __stdcall Unload()
+extern "C" INT_PTR __declspec(dllexport) __stdcall Unload()
 {
   //Wyladowanie wszystkich hookow
   PluginLink.UnhookEvent(OnSystemPopUp);
@@ -175,9 +175,9 @@ extern "C" __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQVe
 {
   PluginInfo.cbSize = sizeof(TPluginInfo);
   PluginInfo.ShortName = L"StealStatus";
-  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,2,1,0);
+  PluginInfo.Version = PLUGIN_MAKE_VERSION(2,3,0,0);
   PluginInfo.Description = L"Wtyczka s³u¿y do ustawiania opisu we wszystkich kontach, na podstawie opisu wybranego kontaktu.";
-  PluginInfo.Author = L"Krzysztof Grochocki (Beherit)";
+  PluginInfo.Author = L"Krzysztof Grochocki";
   PluginInfo.AuthorMail = L"kontakt@beherit.pl";
   PluginInfo.Copyright = L"Krzysztof Grochocki (Beherit)";
   PluginInfo.Homepage = L"http://beherit.pl";
