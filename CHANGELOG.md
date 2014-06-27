@@ -1,7 +1,7 @@
 2.3.0.0
 -----
-* Kompilacja pod poprawionymi nag≥Ûwkami dla wersji 64-bitowej.
-* Zmniejszenie rozmiaru wtyczki 64-bitowej poprzez uøycie kompresji LZMA.
+* Kompilacja pod poprawionymi nag≈Ç√≥wkami dla wersji 64-bitowej.
+* Zmniejszenie rozmiaru wtyczki 64-bitowej poprzez u≈ºycie kompresji LZMA.
 
 2.2.1.0
 -----
@@ -11,7 +11,7 @@
 -----
 * Dodanie 64-bitowej wersji wtyczki.
 * Drobne zmiany w tworzeniu elementu popupmenu kontaktu.
-* Zmniejszenie rozmiaru wtyczki 32-bitowej poprzez uøycie kompresji LZMA.
+* Zmniejszenie rozmiaru wtyczki 32-bitowej poprzez u≈ºycie kompresji LZMA.
 
 2.1.0.0
 -----
@@ -20,19 +20,19 @@
 2.0.0.0
 -----
 * Przepisanie wtyczki pod kompilator Embarcadero C++ Builder 2010.
-* Pe≥ne wsparcie Unicode!
+* Pe≈Çne wsparcie Unicode!
 
 1.0.2.0
 -----
-* UsuniÍcie b≥Ídu uniemoøliwiajπcego uøywanie wtyczki.
+* Usuniƒôcie b≈Çƒôdu uniemo≈ºliwiajƒÖcego u≈ºywanie wtyczki.
 
 1.0.1.0
 -----
 * Zmiana nazwy wtyczki na StealStatus.
-* Dodanie obs≥ugi metakontaktÛw.
+* Dodanie obs≈Çugi metakontakt√≥w.
 * Funkcja jest nieaktywna gdy opis kontaktu jest pusty.
 * Dodanie angielskiej lokalizacji.
-* Poprawiono drobny wyciek pamiÍci.
+* Poprawiono drobny wyciek pamiƒôci.
 
 1.0.0.0
 -----
