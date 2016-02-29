@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-// Copyright (C) 2009-2015 Krzysztof Grochocki
+// Copyright (C) 2009-2016 Krzysztof Grochocki
 //
 // This file is part of StealStatus
 //
@@ -176,9 +176,9 @@ extern "C" __declspec(dllexport) PPluginInfo __stdcall AQQPluginInfo(DWORD AQQVe
   PluginInfo.Version = PLUGIN_MAKE_VERSION(2,3,0,0);
   PluginInfo.Description = L"Wtyczka s³u¿y do ustawiania opisu we wszystkich kontach, na podstawie opisu wybranego kontaktu.";
   PluginInfo.Author = L"Krzysztof Grochocki";
-  PluginInfo.AuthorMail = L"kontakt@beherit.pl";
-  PluginInfo.Copyright = L"Krzysztof Grochocki (Beherit)";
-  PluginInfo.Homepage = L"http://beherit.pl";
+  PluginInfo.AuthorMail = L"contact@beherit.pl";
+  PluginInfo.Copyright = L"Krzysztof Grochocki";
+  PluginInfo.Homepage = L"beherit.pl";
 
   return &PluginInfo;
 }
